@@ -19,6 +19,7 @@
     color: #2E2E2E;
     font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
     width: 100%;
+    overflow-x: hidden;
   }
   .hc-h { font-family: 'Cormorant Garamond', 'Times New Roman', serif; }
   .hc-label {
@@ -35,11 +36,22 @@
     background: #1C2B3A; color: #F5F2EE;
     display: flex; justify-content: space-between; align-items: center;
     padding: 26px 64px;
+    position: relative;
   }
   .hc-nav .word { font-family: 'Cormorant Garamond', serif; font-size: 16px; letter-spacing: 0.1em; }
   .hc-nav-links { display: flex; gap: 36px; }
   .hc-nav-links a { font-size: 12.5px; letter-spacing: 0.08em; color: #F5F2EE; text-decoration: none; text-transform: uppercase; opacity: 0.85; transition: opacity 0.2s ease; }
   .hc-nav-links a:hover { opacity: 1; }
+
+  /* Hamburger toggle — hidden on desktop */
+  .hc-nav-toggle {
+    display: none; flex-direction: column; justify-content: center; align-items: flex-end; gap: 5px;
+    background: none; border: none; cursor: pointer; padding: 8px; margin: -8px -8px -8px 0;
+  }
+  .hc-nav-toggle span { width: 22px; height: 2px; background: #F5F2EE; display: block; transition: transform 0.22s ease, opacity 0.22s ease, width 0.22s ease; }
+  .hc-nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hc-nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .hc-nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
   /* Hero — centered */
   .hc-hero {
@@ -58,9 +70,9 @@
 
   .hc-byline { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 10px; }
   .hc-byline img {
-    width: 64px; height: 64px; border-radius: 50%; object-fit: cover;
-    border: 2px solid rgba(156,74,42,0.4); padding: 3px;
-    box-shadow: 0 6px 18px rgba(28,43,58,0.14);
+    width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
+    border: 2px solid rgba(156,74,42,0.4); padding: 4px;
+    box-shadow: 0 8px 22px rgba(28,43,58,0.16);
   }
   .hc-byline b { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 18px; color: #1C2B3A; }
   .hc-byline span { font-size: 12px; letter-spacing: 0.04em; color: #3D5247; }
@@ -77,15 +89,15 @@
 
   /* Stats color block — moss */
   .hc-stats {
-    background: #3D5247; color: #F5F2EE; padding: 64px 60px;
-    display: flex; flex-wrap: wrap; justify-content: center; row-gap: 32px;
+    background: #3D5247; color: #F5F2EE; padding: 72px 60px;
+    display: flex; flex-wrap: wrap; justify-content: center; row-gap: 36px;
   }
-  .hc-stat { text-align: center; padding: 0 26px; border-right: 1px solid rgba(245,242,238,0.2); max-width: 160px; }
+  .hc-stat { text-align: center; padding: 0 28px; border-right: 1px solid rgba(245,242,238,0.2); max-width: 170px; }
   .hc-stat:last-child { border-right: none; }
-  .hc-stat .hc-h { font-size: 28px; font-weight: 400; }
-  .hc-stat span { font-size: 11.5px; letter-spacing: 0.04em; color: rgba(245,242,238,0.78); display: block; margin-top: 6px; max-width: 150px; line-height: 1.4; }
+  .hc-stat .hc-h { font-size: 36px; font-weight: 500; }
+  .hc-stat span { font-size: 11.5px; letter-spacing: 0.04em; color: rgba(245,242,238,0.78); display: block; margin-top: 8px; max-width: 155px; line-height: 1.4; }
   .hc-stat .hc-h-text {
-    font-family: 'Cormorant Garamond', 'Times New Roman', serif; font-weight: 600; font-size: 21px;
+    font-family: 'Cormorant Garamond', 'Times New Roman', serif; font-weight: 600; font-size: 23px;
     line-height: 1.25; color: #F5F2EE;
   }
 
@@ -170,21 +182,50 @@
   }
 
   @media (max-width: 720px) {
-    .hc-nav { padding: 22px 24px; }
-    .hc-hero { padding: 72px 24px 64px; }
+    .hc-nav { padding: 20px 20px; }
+    .hc-nav-toggle { display: flex; }
+    .hc-nav-links {
+      display: none; position: absolute; top: 100%; left: 0; right: 0;
+      background: #1C2B3A; flex-direction: column; align-items: stretch; gap: 0;
+      padding: 6px 0 18px; box-shadow: 0 12px 20px rgba(0,0,0,0.18); z-index: 50;
+    }
+    .hc-nav-links.open { display: flex; }
+    .hc-nav-links a { padding: 14px 24px; text-align: center; opacity: 1; }
+    .hc-nav-links a:active { opacity: 0.7; }
+
+    .hc-hero { padding: 64px 24px 56px; gap: 22px; }
     .hc-hero .line1, .hc-hero .line2 { font-size: 27px; }
-    .hc-stats { padding: 44px 24px; gap: 28px 0; }
-    .hc-stat { border-right: none; padding: 0 16px; }
+    .hc-hero p.hc-sub { font-size: 15.5px; }
+    .hc-byline img { width: 92px; height: 92px; }
+
+    .hc-stats {
+      padding: 48px 24px; display: grid; grid-template-columns: 1fr 1fr;
+      gap: 36px 12px; text-align: center;
+    }
+    .hc-stat { border-right: none; padding: 0 4px; max-width: none; }
+    .hc-stat .hc-h { font-size: 30px; }
+    .hc-stat .hc-h-text { font-size: 18px; }
+    .hc-stat span { max-width: none; margin: 6px auto 0; }
+
     .hc-modes { flex-direction: column; }
     .hc-mode { padding: 44px 24px; }
     .hc-mode:first-child { border-right: none; border-bottom: 1px solid rgba(46,46,46,0.15); }
+
     .hc-why-list { padding: 12px 24px 48px; gap: 36px; }
-    .hc-range { padding: 64px 24px; }
-    .hc-range-row { flex-direction: column; align-items: center; }
-    .hc-range-item { border-right: none; text-align: center; max-width: 100%; }
-    .hc-quote-block { padding: 64px 24px; }
-    .hc-quote-block p { font-size: 24px; }
-    .hc-contact { padding: 72px 24px 90px; }
+
+    .hc-range { padding: 56px 24px 64px; }
+    .hc-range-row { flex-direction: column; align-items: stretch; }
+    .hc-range-item {
+      border-right: none; border-bottom: 1px solid rgba(245,242,238,0.18);
+      text-align: center; max-width: 100%; margin: 0; padding: 0 8px 24px; align-items: center;
+    }
+    .hc-range-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .hc-range-row > .hc-range-item:not(:last-child) { margin-bottom: 24px; }
+
+    .hc-quote-block { padding: 56px 24px; }
+    .hc-quote-block p { font-size: 23px; }
+
+    .hc-contact { padding: 64px 24px 80px; }
   }
 </style>
 </head>
@@ -192,10 +233,13 @@
 <div class="hc-root">
   <div class="hc-nav">
     <div class="word">HOLLINGSHEAD CONSULTING</div>
-    <div class="hc-nav-links">
-      <a href="#approach">Approach</a>
-      <a href="#engagements">Engagements</a>
-      <a href="#contact">Contact</a>
+    <button class="hc-nav-toggle" id="hcNavToggle" aria-label="Open menu" aria-expanded="false" onclick="hcToggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="hc-nav-links" id="hcNavLinks">
+      <a href="#approach" onclick="hcCloseMenu()">Approach</a>
+      <a href="#engagements" onclick="hcCloseMenu()">Engagements</a>
+      <a href="#contact" onclick="hcCloseMenu()">Contact</a>
     </div>
   </div>
 
@@ -205,7 +249,7 @@
       <span class="hc-h line1">Bringing your new ideas to life,</span>
       <span class="hc-h line2">or solving obstacles to your existing goals.</span>
     </h1>
-    <p class="hc-sub">With the rigor of a management consultant and the experience of a hands-on founder, I bring top-tier strategic thinking by the project, without the commitment to payroll costs.</p>
+    <p class="hc-sub">I bring top-tier strategic thinking by the project, without the commitment to payroll costs, with the rigor of a management consultant and the experience of a hands-on founder.</p>
 
     <div class="hc-byline">
       <img src="headshot.jpg" alt="Erin Hollingshead">
@@ -247,9 +291,22 @@
     </div>
   </div>
 
+  <div class="hc-stats">
+    <div class="hc-stat"><div class="hc-h">£6M+</div><span>Funding &amp; revenue impact driven</span></div>
+    <div class="hc-stat"><div class="hc-h">50%</div><span>Manual data entry reduced</span></div>
+    <div class="hc-stat"><div class="hc-h">30+</div><span>Team members led</span></div>
+    <div class="hc-stat"><div class="hc-h">200+</div><span>SKUs owned end-to-end</span></div>
+    <div class="hc-stat"><div class="hc-h">7+</div><span>Retail locations run</span></div>
+    <div class="hc-stat"><div class="hc-h-text">USA, UK, Europe, Middle East</div><span>Regions operated in</span></div>
+  </div>
+
   <div class="hc-range" id="engagements">
     <div class="hc-range-head">Range</div>
     <div class="hc-range-row">
+      <div class="hc-range-item">
+        <div class="hc-h">Finance</div>
+        <p>Budget management, cashflow forecasting, fractional CFO / COO support.</p>
+      </div>
       <div class="hc-range-item">
         <div class="hc-h">Strategy</div>
         <p>Direction, positioning, market &amp; product-fit research.</p>
@@ -307,14 +364,6 @@
     </div>
   </div>
 
-  <div class="hc-stats">
-    <div class="hc-stat"><div class="hc-h">£6M+</div><span>Funding secured</span></div>
-    <div class="hc-stat"><div class="hc-h-text">USA, UK, Europe, Middle East</div><span>Regions of experience</span></div>
-    <div class="hc-stat"><div class="hc-h">30+</div><span>Team members managed</span></div>
-    <div class="hc-stat"><div class="hc-h">7+</div><span>Retail locations managed</span></div>
-    <div class="hc-stat"><div class="hc-h">200+</div><span>SKUs managed</span></div>
-  </div>
-
   <div class="hc-contact" id="contact">
     <h2 class="hc-h">Start a conversation</h2>
     <p class="hc-sub2">Most useful for founders and CEOs who know strategic work is being neglected, but don't have the bandwidth to fix it internally.</p>
@@ -339,5 +388,23 @@
 
   <div class="hc-footer">© 2026 Hollingshead Consulting</div>
 </div>
+<script>
+  function hcToggleMenu() {
+    var links = document.getElementById('hcNavLinks');
+    var btn = document.getElementById('hcNavToggle');
+    var isOpen = links.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+  function hcCloseMenu() {
+    document.getElementById('hcNavLinks').classList.remove('open');
+    document.getElementById('hcNavToggle').classList.remove('open');
+    document.getElementById('hcNavToggle').setAttribute('aria-expanded', 'false');
+  }
+  document.addEventListener('click', function(e) {
+    var nav = document.querySelector('.hc-nav');
+    if (nav && !nav.contains(e.target)) hcCloseMenu();
+  });
+</script>
 </body>
 </html>

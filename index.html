@@ -13,7 +13,7 @@
 <style>
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body { margin: 0; }
+  body { margin: 0; background: #F5F2EE; }
   .hc-root {
     background: #F5F2EE;
     color: #2E2E2E;
@@ -35,35 +35,69 @@
     background: #1C2B3A; color: #F5F2EE;
     display: flex; justify-content: space-between; align-items: center;
     padding: 26px 64px;
+    position: relative;
   }
   .hc-nav .word { font-family: 'Cormorant Garamond', serif; font-size: 16px; letter-spacing: 0.1em; }
   .hc-nav-links { display: flex; gap: 36px; }
   .hc-nav-links a { font-size: 12.5px; letter-spacing: 0.08em; color: #F5F2EE; text-decoration: none; text-transform: uppercase; opacity: 0.85; transition: opacity 0.2s ease; }
   .hc-nav-links a:hover { opacity: 1; }
 
-  /* Hero — centered */
-  .hc-hero {
-    display: flex; flex-direction: column; align-items: center; text-align: center;
-    padding: 120px 100px 100px; gap: 26px;
+  /* Mobile hamburger + menu */
+  .hc-hamburger {
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    width: 30px; height: 30px; background: none; border: none; cursor: pointer; padding: 0;
+    position: relative; z-index: 30;
   }
+  .hc-hamburger span {
+    display: block; width: 100%; height: 2px; background: #F5F2EE;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .hc-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hc-hamburger.open span:nth-child(2) { opacity: 0; }
+  .hc-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .hc-mobile-menu {
+    display: none; flex-direction: column;
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: #1C2B3A; padding: 4px 24px 16px; z-index: 20;
+    border-top: 1px solid rgba(245,242,238,0.15);
+  }
+  .hc-mobile-menu.open { display: flex; }
+  .hc-mobile-menu a {
+    color: #F5F2EE; text-decoration: none; font-size: 13.5px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 14px 0; border-bottom: 1px solid rgba(245,242,238,0.12);
+  }
+  .hc-mobile-menu a:last-child { border-bottom: none; }
+
+  /* Hero — centered, with portrait on the side at wider widths */
+  .hc-hero { padding: 120px 100px 100px; }
+  .hc-hero-inner {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    max-width: 1180px; margin: 0 auto; gap: 34px;
+  }
+  .hc-hero-top {
+    display: flex; flex-direction: column; align-items: center; gap: 20px;
+  }
+  .hc-hero-nametitle {
+    display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px;
+  }
+  .hero-name { font-size: 44px; font-weight: 400; letter-spacing: 0.005em; color: #1C2B3A; line-height: 1.15; }
+  .hc-divider { width: 9px; height: 9px; background: #9C4A2A; transform: rotate(45deg); flex: none; }
+  .hc-hero-photo {
+    width: 190px; height: 190px; border-radius: 50%; object-fit: cover; object-position: center;
+    box-shadow: 0 10px 28px rgba(28,43,58,0.18); flex: none;
+  }
+  .hc-hero-photo-desktop { display: none; }
   .hc-hero h1 {
     font-weight: 300; line-height: 1.18; letter-spacing: 0.005em;
-    max-width: 900px; margin: 0;
+    max-width: 900px; margin: 4px 0 0;
   }
   .hc-hero .line1 { font-size: 44px; color: #1C2B3A; display: block; }
   .hc-hero .line2 { font-size: 44px; color: #9C4A2A; font-style: italic; font-weight: 400; display: block; }
+  .hc-hero-or { display: block; width: 40px; height: 1px; background: rgba(156,74,42,0.45); margin: 12px auto; }
   .hc-hero p.hc-sub {
     max-width: 540px; font-size: 16.5px; line-height: 1.65; color: #2E2E2E; margin: 6px 0 0;
   }
-
-  .hc-byline { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 10px; }
-  .hc-byline img {
-    width: 64px; height: 64px; border-radius: 50%; object-fit: cover;
-    border: 2px solid rgba(156,74,42,0.4); padding: 3px;
-    box-shadow: 0 6px 18px rgba(28,43,58,0.14);
-  }
-  .hc-byline b { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 18px; color: #1C2B3A; }
-  .hc-byline span { font-size: 12px; letter-spacing: 0.04em; color: #3D5247; }
+  .hero-credentials { font-size: 12px; letter-spacing: 0.04em; color: #3D5247; margin-top: 6px; }
 
   .hc-cta-row { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 14px; }
   .hc-btn {
@@ -75,9 +109,9 @@
   .hc-link { font-size: 13px; letter-spacing: 0.06em; color: #3D5247; text-decoration: none; border-bottom: 1px solid rgba(61,82,71,0.35); padding-bottom: 2px; transition: border-color 0.2s ease; }
   .hc-link:hover { border-color: #3D5247; }
 
-  /* Stats color block — moss */
+  /* Stats color block — now navy */
   .hc-stats {
-    background: #3D5247; color: #F5F2EE; padding: 64px 60px;
+    background: #1C2B3A; color: #F5F2EE; padding: 64px 60px;
     display: flex; flex-wrap: wrap; justify-content: center; row-gap: 32px;
   }
   .hc-stat { text-align: center; padding: 0 26px; border-right: 1px solid rgba(245,242,238,0.2); max-width: 160px; }
@@ -115,8 +149,8 @@
   .hc-why-body h4 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 24px; margin: 0 0 8px; color: #1C2B3A; }
   .hc-why-body p { margin: 0; font-size: 15px; line-height: 1.6; color: #2E2E2E; max-width: 480px; }
 
-  /* Range — expanded, ink */
-  .hc-range { padding: 96px 100px; text-align: center; background: #1C2B3A; color: #F5F2EE; }
+  /* Range — expanded, now moss */
+  .hc-range { padding: 96px 100px; text-align: center; background: #3D5247; color: #F5F2EE; }
   .hc-range-head { font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #c98a5e; margin-bottom: 40px; font-weight: 600; }
   .hc-range-row { display: flex; flex-wrap: wrap; justify-content: center; }
   .hc-range-item {
@@ -169,22 +203,56 @@
     padding: 26px 24px; font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase;
   }
 
+  @media (min-width: 860px) {
+    .hc-hero-top { flex-direction: row; gap: 28px; }
+    .hc-hero-nametitle { align-items: flex-start; text-align: left; }
+    .hc-hero-photo-mobile { display: none; }
+    .hc-hero-photo-desktop { display: block; width: 140px; height: 140px; }
+  }
+
   @media (max-width: 720px) {
-    .hc-nav { padding: 22px 24px; }
-    .hc-hero { padding: 72px 24px 64px; }
-    .hc-hero .line1, .hc-hero .line2 { font-size: 27px; }
-    .hc-stats { padding: 44px 24px; gap: 28px 0; }
-    .hc-stat { border-right: none; padding: 0 16px; }
+    .hc-nav { padding: 20px 20px; }
+    .hc-nav .word { font-size: 13.5px; letter-spacing: 0.06em; }
+    .hc-nav-links { display: none; }
+    .hc-hamburger { display: flex; }
+
+    .hc-hero { padding: 64px 24px 56px; }
+    .hc-hero-inner { gap: 20px; }
+    .hc-hero-top { gap: 14px; }
+    .hc-hero-nametitle { gap: 6px; }
+    .hero-name { font-size: 32px; }
+    .hc-divider { width: 7px; height: 7px; }
+    .hc-hero-photo { width: 148px; height: 148px; }
+    .hc-hero .line1, .hc-hero .line2 { font-size: 25px; }
+    .hc-hero-or { width: 32px; margin: 10px auto; }
+    .hc-hero p.hc-sub { font-size: 15px; }
+
+    .hc-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 20px; padding: 48px 24px; }
+    .hc-stat { border-right: none; padding: 0 4px; max-width: none; }
+    .hc-stat .hc-h { font-size: 24px; }
+    .hc-stat .hc-h-text { font-size: 17px; }
+    .hc-stat span { font-size: 11px; }
+
     .hc-modes { flex-direction: column; }
     .hc-mode { padding: 44px 24px; }
     .hc-mode:first-child { border-right: none; border-bottom: 1px solid rgba(46,46,46,0.15); }
+
     .hc-why-list { padding: 12px 24px 48px; gap: 36px; }
-    .hc-range { padding: 64px 24px; }
-    .hc-range-row { flex-direction: column; align-items: center; }
-    .hc-range-item { border-right: none; text-align: center; max-width: 100%; }
-    .hc-quote-block { padding: 64px 24px; }
-    .hc-quote-block p { font-size: 24px; }
-    .hc-contact { padding: 72px 24px 90px; }
+
+    .hc-range { padding: 56px 24px; }
+    .hc-range-head { margin-bottom: 8px; }
+    .hc-range-row { flex-direction: column; align-items: center; width: 100%; }
+    .hc-range-item {
+      border-right: none; text-align: center; max-width: 320px; width: 100%;
+      margin: 0 auto; padding: 24px 8px; gap: 6px;
+      border-bottom: 1px solid rgba(245,242,238,0.18);
+    }
+    .hc-range-item:last-child { border-bottom: none; padding-bottom: 4px; }
+
+    .hc-quote-block { padding: 56px 24px; }
+    .hc-quote-block p { font-size: 22px; }
+
+    .hc-contact { padding: 64px 24px 80px; }
   }
 </style>
 </head>
@@ -197,25 +265,39 @@
       <a href="#engagements">Engagements</a>
       <a href="#contact">Contact</a>
     </div>
+    <button class="hc-hamburger" id="hc-menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="hc-mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="hc-mobile-menu" id="hc-mobile-menu">
+      <a href="#approach">Approach</a>
+      <a href="#engagements">Engagements</a>
+      <a href="#contact">Contact</a>
+    </div>
   </div>
 
   <div class="hc-hero">
-    <div class="hc-label">Fractional Strategy &amp; Operations Lead</div>
-    <h1>
-      <span class="hc-h line1">Bringing your new ideas to life,</span>
-      <span class="hc-h line2">or solving obstacles to your existing goals.</span>
-    </h1>
-    <p class="hc-sub">With the rigor of a management consultant and the experience of a hands-on founder, I bring top-tier strategic thinking by the project, without the commitment to payroll costs.</p>
+    <div class="hc-hero-inner">
+      <div class="hc-hero-top">
+        <img class="hc-hero-photo hc-hero-photo-desktop" src="headshot.jpg" alt="Erin Hollingshead">
+        <div class="hc-hero-nametitle">
+          <div class="hero-name hc-h">Erin Hollingshead</div>
+          <div class="hc-label">Fractional Strategy &amp; Operations Lead</div>
+        </div>
+      </div>
+      <img class="hc-hero-photo hc-hero-photo-mobile" src="headshot.jpg" alt="Erin Hollingshead">
+      <span class="hc-divider" aria-hidden="true"></span>
+      <h1>
+        <span class="hc-h line1">Bring your new ideas to life.</span>
+        <span class="hc-hero-or" aria-hidden="true"></span>
+        <span class="hc-h line2">Make what you already have faster, cheaper, easier.</span>
+      </h1>
+      <p class="hc-sub">With the rigor of a management consultant and the experience of a hands-on founder, I bring top-tier strategic thinking by the project, without the commitment to payroll costs.</p>
+      <div class="hero-credentials">Ex-Alvarez &amp; Marsal · London Business School MBA</div>
 
-    <div class="hc-byline">
-      <img src="headshot.jpg" alt="Erin Hollingshead">
-      <b class="hc-h">Erin Hollingshead</b>
-      <span>Ex-Alvarez &amp; Marsal · London Business School MBA</span>
-    </div>
-
-    <div class="hc-cta-row">
-      <a class="hc-btn" href="#contact" style="text-decoration:none; display:inline-block;">Start a conversation</a>
-      <a class="hc-link" href="#approach">See how it works ↓</a>
+      <div class="hc-cta-row">
+        <a class="hc-btn" href="#contact" style="text-decoration:none; display:inline-block;">Start a conversation</a>
+        <a class="hc-link" href="#approach">See how it works ↓</a>
+      </div>
     </div>
   </div>
 
@@ -247,30 +329,13 @@
     </div>
   </div>
 
-  <div class="hc-range" id="engagements">
-    <div class="hc-range-head">Range</div>
-    <div class="hc-range-row">
-      <div class="hc-range-item">
-        <div class="hc-h">Strategy</div>
-        <p>Direction, positioning, market &amp; product-fit research.</p>
-      </div>
-      <div class="hc-range-item">
-        <div class="hc-h">International Expansion</div>
-        <p>Market entry, regional operations, structure.</p>
-      </div>
-      <div class="hc-range-item">
-        <div class="hc-h">Marketing</div>
-        <p>Brand strategy, positioning, go-to-market.</p>
-      </div>
-      <div class="hc-range-item">
-        <div class="hc-h">Ecommerce &amp; Operations</div>
-        <p>Supplier rationalization, process design, scaling.</p>
-      </div>
-      <div class="hc-range-item">
-        <div class="hc-h">Program Management</div>
-        <p>PMO setup, portfolio triage, delivery.</p>
-      </div>
-    </div>
+  <div class="hc-stats">
+    <div class="hc-stat"><div class="hc-h">$10M+</div><span>Funding secured</span></div>
+    <div class="hc-stat"><div class="hc-h">30</div><span>Largest team managed</span></div>
+    <div class="hc-stat"><div class="hc-h">15+</div><span>Retail locations managed</span></div>
+    <div class="hc-stat"><div class="hc-h">$0 → $1.5M</div><span>Revenue scaled</span></div>
+    <div class="hc-stat"><div class="hc-h">65+</div><span>Processes built from scratch</span></div>
+    <div class="hc-stat"><div class="hc-h-text">USA, UK, Europe, Middle East</div><span>Regions of experience</span></div>
   </div>
 
   <div class="hc-why-head-wrap">
@@ -307,12 +372,34 @@
     </div>
   </div>
 
-  <div class="hc-stats">
-    <div class="hc-stat"><div class="hc-h">£6M+</div><span>Funding secured</span></div>
-    <div class="hc-stat"><div class="hc-h-text">USA, UK, Europe, Middle East</div><span>Regions of experience</span></div>
-    <div class="hc-stat"><div class="hc-h">30+</div><span>Team members managed</span></div>
-    <div class="hc-stat"><div class="hc-h">7+</div><span>Retail locations managed</span></div>
-    <div class="hc-stat"><div class="hc-h">200+</div><span>SKUs managed</span></div>
+  <div class="hc-range" id="engagements">
+    <div class="hc-range-head">Range</div>
+    <div class="hc-range-row">
+      <div class="hc-range-item">
+        <div class="hc-h">Finance</div>
+        <p>Budget management, cashflow forecasting, fractional CFO / COO support.</p>
+      </div>
+      <div class="hc-range-item">
+        <div class="hc-h">Strategy</div>
+        <p>Direction, positioning, market &amp; product-fit research.</p>
+      </div>
+      <div class="hc-range-item">
+        <div class="hc-h">International Expansion</div>
+        <p>Market entry, regional operations, structure.</p>
+      </div>
+      <div class="hc-range-item">
+        <div class="hc-h">Marketing</div>
+        <p>Brand strategy, positioning, go-to-market.</p>
+      </div>
+      <div class="hc-range-item">
+        <div class="hc-h">Ecommerce &amp; Operations</div>
+        <p>Supplier rationalization, process design, scaling.</p>
+      </div>
+      <div class="hc-range-item">
+        <div class="hc-h">Program Management</div>
+        <p>PMO setup, portfolio triage, delivery.</p>
+      </div>
+    </div>
   </div>
 
   <div class="hc-contact" id="contact">
@@ -339,5 +426,27 @@
 
   <div class="hc-footer">© 2026 Hollingshead Consulting</div>
 </div>
+
+<script>
+(function(){
+  var btn = document.getElementById('hc-menu-btn');
+  var menu = document.getElementById('hc-mobile-menu');
+  if (!btn || !menu) return;
+  btn.addEventListener('click', function(){
+    var isOpen = menu.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  var links = menu.querySelectorAll('a');
+  for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener('click', function(){
+      menu.classList.remove('open');
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
